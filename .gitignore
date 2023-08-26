@@ -17,3 +17,5 @@ src/3/*.*
 *.map
 *.dll
 *.dcu
+*.exe
+*.~ddp

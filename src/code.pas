@@ -9,10 +9,10 @@ unit code;
 interface
 
 uses
-  Dialogs, Interfaces;
+  Forms, SysUtils, Dialogs;
 
 type
-  TControlsStandard = class(TInterfacedObject, IPluginCentral)
+  TPluginInterface = class(TObject)
   private
     FFileVersion    : String;
     FFileAuthor     : String;
@@ -30,31 +30,44 @@ type
     property Version: String read FFileVersion;
   end;
 
+function RegisterPlugin(app: TApplication): Boolean; stdcall; export;
+
 implementation
 
-constructor TControlsStandard.Create;
+constructor TPluginInterface.Create;
 begin
   inherited Create;
+  FFileVersion := 'testfile';
 end;
-destructor TControlsStandard.Destroy;
+destructor TPluginInterface.Destroy;
 begin
   inherited Destroy;
 end;
 
-function TControlsStandard.GetVersion: String;
+function TPluginInterface.GetVersion: String;
 begin
-ShowMessage('huhu');
   result := FFileVersion;
 end;
 
-function TControlsStandard.GetAuthor: String;
+function TPluginInterface.GetAuthor: String;
 begin
   result := FFileAuthor;
 end;
 
-function TControlsStandard.GetDescription: String;
+function TPluginInterface.GetDescription: String;
 begin
   result := FFileDescription;
+end;
+
+function RegisterPlugin(app: TApplication): Boolean; stdcall; export;
+var
+  C: TPluginInterface;
+begin
+  ShowMessage(app.ExeName);
+  C := TPluginInterface.Create;
+  ShowMessage(C.GetVersion);
+  FreeAndNil(C);
+  result := true;
 end;
 
 end.

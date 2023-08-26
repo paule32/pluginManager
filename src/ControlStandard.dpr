@@ -9,10 +9,12 @@ library ControlStandard;
 uses
   SysUtils,
   Classes,
-  Interfaces in 'Interfaces.pas',
   code in 'code.pas';
 
 {$R *.res}
+
+exports
+  RegisterPlugin;
 
 begin
 end.
