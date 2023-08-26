@@ -25,7 +25,7 @@ implementation
 
 procedure TForm1.CallExternal;
 var
-  RegisterPlugin: function(var AResult: Variant; app: TApplication): Boolean;
+  RegisterPlugin: function(app: TApplication): Boolean; stdcall;
   varResult: Variant;
 begin
   FRootModule := LoadLibrary(PChar('ControlStandard.dll'));
@@ -42,11 +42,9 @@ begin
     exit;
   end;
 
-  varResult := 42;
-  RegisterPlugin(varResult,Application);
-
-  if varResult = 32 then
+  RegisterPlugin(Application);
   ShowMessage('klatsch');
+
   FreeLibrary(FRootModule);
 end;
 
