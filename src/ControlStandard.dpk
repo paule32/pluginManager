@@ -1,0 +1,42 @@
+// -------------------------------------------------------------------
+// File:    package.pas
+// Author:  paule32 - Jens Kallup
+// License: (c) 2023  non-profit Software
+//          All Rights Reserved - only for private or education usage.
+// -------------------------------------------------------------------
+package ControlStandard;
+
+{$R *.res}
+{$ALIGN 1}
+{$ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA OFF}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE ON}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $4000000}
+{$DESCRIPTION 'PluginManager v1.0 (c) 2023 by paule32'}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl;
+
+contains
+  plugin in 'plugin.pas',
+  pluginManager in 'pluginManager.pas';
+
+end.
