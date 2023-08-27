@@ -24,3 +24,4 @@ src/demo3/Project1.res
 src/test3/Project1.res
 *.drc
 src/demo3/Project1.drc
+*.~tlb

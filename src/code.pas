@@ -30,7 +30,7 @@ type
     property Version: String read FFileVersion;
   end;
 
-function RegisterPlugin(app: TApplication): Boolean; stdcall; export;
+function RegisterPlugin(app: TApplication): WideString; stdcall; export;
 
 implementation
 
@@ -59,7 +59,7 @@ begin
   result := FFileDescription;
 end;
 
-function RegisterPlugin(app: TApplication): Boolean; stdcall; export;
+function RegisterPlugin(app: TApplication): WideString; stdcall; export;
 var
   C: TPluginInterface;
 begin
@@ -67,7 +67,7 @@ begin
   C := TPluginInterface.Create;
   ShowMessage(C.GetVersion);
   FreeAndNil(C);
-  result := true;
+  result := WideString('lolo');
 end;
 
 end.

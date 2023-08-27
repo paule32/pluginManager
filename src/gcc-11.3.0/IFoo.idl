@@ -1,0 +1,14 @@
+// ----------------------------------------------------------------------------
+// File   : IFoo.idl
+// Author : (c) 2023 paule32 - Jens Kallup - non-profit Software
+// License: all rights reserved.
+// ----------------------------------------------------------------------------
+
+import "oaidl.idl"; // Standard-Header for COM-Interfaces
+
+[ object, uuid(A46C12C0-4E88-11ce-A6F1-00AA0037DEFB) ]
+interface IFoo : IUnknown
+{
+    HRESULT SetValue ([in] int);
+    HRESULT GetValue ([out] int *);
+};
