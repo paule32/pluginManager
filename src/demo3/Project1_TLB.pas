@@ -5,7 +5,6 @@ unit Project1_TLB;
 {$WRITEABLECONST ON}
 {$VARPROPSETTER ON}
 interface
-
 uses
   Windows, ActiveX, Classes, Graphics, StdVCL, Variants;
 
