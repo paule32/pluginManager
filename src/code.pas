@@ -30,7 +30,7 @@ type
     property Version: String read FFileVersion;
   end;
 
-function RegisterPlugin(app: TApplication): WideString; stdcall; export;
+function RegisterPlugin(app: TApplication): Boolean; stdcall; export;
 
 implementation
 
@@ -59,15 +59,21 @@ begin
   result := FFileDescription;
 end;
 
-function RegisterPlugin(app: TApplication): WideString; stdcall; export;
+function RegisterPlugin(app: TApplication): Boolean; stdcall; export;
 var
   C: TPluginInterface;
 begin
+  if LowerCase(ExtractFileName(app.ExeName)) <> 'editor.exe' then
+  begin
+    result := false;
+    exit;
+  end;
+
   ShowMessage(app.ExeName);
   C := TPluginInterface.Create;
   ShowMessage(C.GetVersion);
   FreeAndNil(C);
-  result := WideString('lolo');
+  result := true;
 end;
 
 end.

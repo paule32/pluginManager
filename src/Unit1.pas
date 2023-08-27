@@ -11,7 +11,7 @@ type
     Button1: TButton;
     procedure Button1Click(Sender: TObject);
   private
-    FRootModule: HMODULE;
+    HM: HMODULE;
   public
     procedure CallExternal;
   end;
@@ -28,24 +28,20 @@ var
   RegisterPlugin: function(app: TApplication): Boolean; stdcall;
   varResult: Variant;
 begin
-  FRootModule := LoadLibrary(PChar('ControlStandard.dll'));
-  if FRootModule = 0 then
-  begin
-    ShowMessage('Error during plugin load.');
-    exit;
-  end;
-  @RegisterPlugin := GetProcAddress(FRootModule, 'RegisterPlugin');
-  if not(Assigned(RegisterPlugin)) then
-  begin
-    ShowMessage('Error could not be registered.');
-    FreeLibrary(FRootModule);
-    exit;
-  end;
+  HM := LoadLibrary(PChar('ControlStandard.dll'));
+  try
+    if HM = 0 then
+    raise Exception.Create('Error: during plugin load.');
 
-  RegisterPlugin(Application);
-  ShowMessage('klatsch');
+    @RegisterPlugin := GetProcAddress(HM, 'RegisterPlugin');
+    if not(Assigned(RegisterPlugin)) then
+    raise Exception.Create('Error: could not be registered.');
 
-  FreeLibrary(FRootModule);
+    if not(RegisterPlugin(Application)) then
+    raise Exception.Create('Error: plugin not for this Application.');
+  finally
+    FreeLibrary(HM);
+  end;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
