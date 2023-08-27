@@ -13,8 +13,5 @@ uses
 
 {$R *.res}
 
-exports
-  RegisterPlugin;
-
 begin
 end.

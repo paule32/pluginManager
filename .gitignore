@@ -26,3 +26,4 @@ src/test3/Project1.res
 src/demo3/Project1.drc
 *.~tlb
 *.drc
+src/demo3/Project1_TLB.pas

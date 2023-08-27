@@ -9,43 +9,34 @@ unit code;
 interface
 
 uses
-  Forms, Dialogs, Classes, SysUtils;
+  Forms, Dialogs, Controls, Classes, SysUtils;
 
 type
-  TPluginItemA = class(TCollection)
+  TPluginItemObject = class(TObject)
   private
     FValueA: Integer;
   public
     property ValueA: Integer read FValueA write FValueA;
   end;
-  TPluginItemB = class(TCollection)
-  private
-    FValueB: Integer;
-  public
-    property ValueB: Integer read FValueB write FValueB;
-  end;
 
   TPluginCollection = class(TCollection)
   private
-    FItemACount: Integer;
-    FItemBCount: Integer;
+    FItemCount: Integer;
 
-    function GetItemA(Index: Integer): TPluginItemA;
-    function GetItemB(Index: Integer): TPluginItemB;
+    function GetItemObject(AIndex: Integer): TPluginItemObject;
+    function GetItemString(AName: String): TPluginItemObject;
 
-    function GetItemACount: Integer;
-    function GetItemBCount: Integer;
+    function GetItemCount: Integer;
   public
-    function AddA: TPluginItemA;
-    function AddB: TPluginItemB;
+    function Add(AName: String): TPluginItemObject;
 
     constructor Create;
     destructor Destroy; override;
-    property ItemsA[Index: Integer]: TPluginItemA read GetItemA;
-    property ItemsB[Index: Integer]: TPluginItemB read GetItemB;
 
-    property CountA: Integer read GetItemACount;
-    property CountB: Integer read GetItemBCount;
+    property Objects[AIndex: Integer]: TPluginItemObject read GetItemObject;
+    property Strings[AName: String]:   TPluginItemObject read GetItemString;
+
+    property Count: Integer read GetItemCount;
   end;
 
   TPluginInterface = class(TObject)
@@ -74,45 +65,34 @@ implementation
 
 constructor TPluginCollection.Create;
 begin
-  FItemACount := -1;
-  FItemBCount := -1;
+  FItemCount := -1;
 end;
 destructor TPluginCollection.Destroy;
 begin
   inherited Destroy;
 end;
 
-function TPluginCollection.AddA: TPluginItemA;
+function TPluginCollection.Add(AName: String): TPluginItemObject;
 var
-  plugin: TPluginItemA;
+  plugin: TPluginItemObject;
 begin
-  plugin := TPluginItemA(inherited Add);
-  result := plugin;
-end;
-function TPluginCollection.AddB: TPluginItemB;
-var
-  plugin: TPluginItemB;
-begin
-  plugin := TPluginItemB(inherited Add);
+  plugin := TPluginItemObject(inherited Add);
   result := plugin;
 end;
 
-function TPluginCollection.GetItemA(Index: Integer): TPluginItemA;
+function TPluginCollection.GetItemObject(AIndex: Integer): TPluginItemObject;
 begin
-  result := TPluginItemA(inherited Add);
-end;
-function TPluginCollection.GetItemB(Index: Integer): TPluginItemB;
-begin
-  result := TPluginItemB(inherited Add);
+  result := TPluginItemObject(inherited Add);
 end;
 
-function TPluginCollection.GetItemACount: Integer;
+function TPluginCollection.GetItemString(AName: String): TPluginItemObject;
 begin
-  result := FItemACount;
+  result := TPluginItemObject(inherited Add);
 end;
-function TPluginCollection.GetItemBCount: Integer;
+
+function TPluginCollection.GetItemCount: Integer;
 begin
-  result := FItemBCount;
+  result := FItemCount;
 end;
 
 constructor TPluginInterface.Create;
@@ -145,17 +125,32 @@ end;
 function RegisterPlugin(app: TApplication): Boolean; stdcall; export;
 var
   C: TPluginInterface;
+  T: TControl;
 begin
-  if LowerCase(ExtractFileName(app.ExeName)) <> 'editor.exe' then
-  begin
-    result := false;
-    exit;
-  end;
+  try
+    try
+      if LowerCase(ExtractFileName(app.ExeName)) <> 'project1.exe' then
+      raise Exception.Create('Host-Application does not match file name');
 
-  ShowMessage(app.Title);
-  C := TPluginInterface.Create;
-  ShowMessage(C.GetVersion);
-  FreeAndNil(C);
+      if app.ComponentCount < 0 then
+      raise Exception.Create('Host-Application is empty.');
+
+      ShowMessage(app.Title + ' has: ' + IntToStr(app.MainForm.ComponentCount) + ' components');
+      C := TPluginInterface.Create;
+      ShowMessage(C.GetVersion);
+      FreeAndNil(C);
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Error:' +
+        #10 + 'ClassName: '  + E.ClassName +
+        #10 + 'Message  : '  + E.Message);
+        result := false;
+        exit;
+      end;
+    end;
+  finally
+  end;
   result := true;
 end;
 
